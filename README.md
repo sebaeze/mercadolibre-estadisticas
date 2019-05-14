@@ -1,13 +1,16 @@
+# Mercadolibre-Estadisticas
+Sincronización de datos de mercadolibre en base Mongodb & APIs para acceder a los daatos.
+
 ## Instalación y configuración
 
-git clone https://github.com/sebaeze/mercadolibre-estadisticas.git
-Ir a https://applications.mercadolibre.com/
-Generar applicación:
+* git clone https://github.com/sebaeze/mercadolibre-estadisticas.git
+* Ir a https://applications.mercadolibre.com/
+* Generar applicación:
     * Copiar App ID & Secret Key en -> /server/config/config.json
-Cargar direccion de base mongo en   -> /server/config/config.json
+* Cargar direccion de base mongo en   -> /server/config/config.json
 
 ## Run
-npm install
-npm start
+* npm install
+* npm start
 
 ##

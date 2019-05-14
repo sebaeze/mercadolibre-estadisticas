@@ -7,5 +7,11 @@
         "database":"melliSincro",
         "usuario":"sebaeze",
         "password":"ZXCasdqwe123"
+    },
+    "batch":{
+        "intervalo":"3600"
+    },
+    "api":{
+        "puerto":"8000"
     }
 }
