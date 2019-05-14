@@ -1,14 +1,16 @@
 /*
 *  APIs con Express.js
 */
-const iniciarApi = () => {
+const iniciarApi = ( argConfig ) => {
     //
     const express    = require('express')     ;
     const app        = express() ;
     const path       = require('path') ;
     const bodyParser = require('body-parser') ;
+    /*
     const utilitario = require( path.join(__dirname,'../lib/utiles') ).Utilitarios() ;
     const config     = utilitario.configApp() ;
+    */
     //
     app.all('*', function(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*');
@@ -25,7 +27,7 @@ const iniciarApi = () => {
     /*
     *   Rutas
     */
-    var routerIndex          = require( path.join(__dirname,'/rutas/routerIndex') )(config) ;
+    var routerIndex          = require( path.join(__dirname,'/rutas/routerIndex') )(argConfig) ;
     app.use('/'              , routerIndex           ) ;
     /*
     *
@@ -50,7 +52,7 @@ const iniciarApi = () => {
     //
     //
     try {
-        let puerto = process.env.PORT || config.api.puerto || 9000  ;
+        let puerto = process.env.PORT || argConfig.api.puerto || 9000  ;
         app.listen(puerto,function(){
           console.log('....listen server on http://localhost:'+puerto) ;
         });
@@ -60,7 +62,7 @@ const iniciarApi = () => {
       //
 }
 //
-module.exports.iniciarApi = () => {
-    iniciarApi() ;
+module.exports.iniciarApi = (argConfig) => {
+    iniciarApi(argConfig) ;
     return this ;
 };

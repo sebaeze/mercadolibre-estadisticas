@@ -51,6 +51,32 @@ module.exports = (argConfig) => {
     //
   });
   //
+  router.all('/mercadollibre/callback/notificaciones', function(req, res) {
+    res.set('access-Control-Allow-Origin', '*');
+    res.set('access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    //
+    console.log(new Date().toISOString()+'...estoy en Mercadolibre callback/notificaciones: ');
+    console.dir(req.headers) ;
+    //
+    res.status(200) ;
+    res.json({"path":"index"});
+    //
+  });
+  //
+  router.all('/mercadollibre/callback/login', function(req, res) {
+    res.set('access-Control-Allow-Origin', '*');
+    res.set('access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    //
+    console.log(new Date().toISOString()+'...estoy en Mercadolibre CallBack/login: ');
+    console.dir(req.headers) ;
+    //
+    res.status(200) ;
+    res.json({"path":"index"});
+    //
+  });
+  //
   router.get('/404', function(req, res) {
     //
     res.setHeader("Access-Control-Allow-Origin", "*");

@@ -1,7 +1,12 @@
 /*
 *   2019-05
 */
-const apiBackend          = require('./api/apiIndex').iniciarApi() ;
+const path                = require('path') ;
+const utilitario          = require( path.join(__dirname,'./lib/utiles') ).Utilitarios() ;
+const config              = utilitario.configApp() ;
+const restAPIs            = require('./api/apiIndex')     ;
+const batchSincronizacion = require('./batch/batchIndex').batchSincronizacion( config ) ;
 //
-const batchSincronizacion = require('./batch/batchIndex') ;
+restAPIs.iniciarApi( config ) ;
+const fnIntervalo = batchSincronizacion.iniciarSincronizacion() ;
 //

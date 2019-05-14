@@ -7,7 +7,8 @@ Sincronización de datos de mercadolibre en base Mongodb & APIs para acceder a l
 * Ir a https://applications.mercadolibre.com/
 * Generar applicación:
     * Copiar App ID & Secret Key en -> /server/config/config.json
-* Cargar direccion de base mongo en   -> /server/config/config.json
+* Mongodb: Crear base 'mlestadisticas', usuario y password.
+* Cargar información de base en   -> /server/config/config.json
 
 ## Run
 * npm install

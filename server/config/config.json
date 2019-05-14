@@ -2,9 +2,10 @@
     "appName":"",
     "AppId":"5820076076281938",
     "secret":"NUTGIk5rSkG0GCbRrY1SnY9YAzdr7Sqb",
+    "sellerId":"60873335",
     "mongoDb":{
-        "url":"localhost:27017",
-        "database":"melliSincro",
+        "url":"mongodb://localhost:27017",
+        "database":"mlestadisticas",
         "usuario":"sebaeze",
         "password":"ZXCasdqwe123"
     },
