@@ -1,0 +1,25 @@
+{
+  "name": "mercadolibre-estadisticas",
+  "version": "1.0.0",
+  "description": "Sincronizacion de datos de mercadolibre con mongodb para analisis",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebaeze/mercadolibre-estadisticas.git"
+  },
+  "keywords": [
+    "mercadolibre",
+    "backend",
+    "mongodb",
+    "react"
+  ],
+  "author": "sebaeze@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sebaeze/mercadolibre-estadisticas/issues"
+  },
+  "homepage": "https://github.com/sebaeze/mercadolibre-estadisticas#readme"
+}

@@ -1,0 +1,11 @@
+{
+    "appName":"",
+    "AppId":"5820076076281938",
+    "secret":"NUTGIk5rSkG0GCbRrY1SnY9YAzdr7Sqb",
+    "mongoDb":{
+        "url":"localhost:27017",
+        "database":"melliSincro",
+        "usuario":"sebaeze",
+        "password":"ZXCasdqwe123"
+    }
+}
