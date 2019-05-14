@@ -4,7 +4,8 @@
   "description": "Sincronizacion de datos de mercadolibre con mongodb para analisis",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/server.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/sebaeze/mercadolibre-estadisticas/issues"
   },
-  "homepage": "https://github.com/sebaeze/mercadolibre-estadisticas#readme"
+  "homepage": "https://github.com/sebaeze/mercadolibre-estadisticas#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "gmail-send": "^1.2.14",
+    "path": "^0.12.7"
+  }
 }

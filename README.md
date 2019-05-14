@@ -1,5 +1,5 @@
 # Mercadolibre-Estadisticas
-Sincronización de datos de mercadolibre en base Mongodb & APIs para acceder a los daatos.
+Sincronización de datos de mercadolibre en base Mongodb & APIs para acceder a los datos.
 
 ## Instalación y configuración
 

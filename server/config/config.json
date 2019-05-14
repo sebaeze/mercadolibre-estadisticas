@@ -13,5 +13,12 @@
     },
     "api":{
         "puerto":"8000"
+    },
+    "email":{
+        "emailEmpresa":"sebaeze@gmail.com",
+        "emailSoporte":"sebaeze@gmail.com",
+        "emailGateway":"jym.all.graphics.email@gmail.com",
+        "passwordEmailGateway":"qaz11qaz",
+        "nombreMuestraEmailGateway":"Mercadolibre-estadisticas Backend"
     }
 }
