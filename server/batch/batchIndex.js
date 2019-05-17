@@ -6,14 +6,14 @@ const requestPromise    = require('request-promise') ;
 const path              = require('path')            ;
 const fs                = require('fs')              ;
 const mkdirp            = require('mkdirp') ;
-const classMelli        = require('./mercadolibreSincro').mercadolibreDatos ;
+const classMelli        = require( path.join(__dirname,'../mercadolibre/mercadolibreIndex') ).mercadolibre ; //({...config,accessToken:'APP_USR-5820076076281938-051509-f98723fa64e94e535d6114b9bcb60ada-15103702'}) ;
 //
 class BatchSincronizacion {
     constructor( argConfig ){
         this.flagSincronizando  = false ;
         this.mlSellerId         = process.env.MERCADOLIBRE_ID || '60873335' ;
         this.tiempoIntervalo    = ( argConfig.batch.intervalo || 3600 ) * 1000 ;
-        this.mercadolibreData   = classMelli(argConfig) ;
+        this.mercadolibre       = classMelli(argConfig) ;
         this.sellerId           = argConfig.sellerId ;
         console.log('...Batch sincronizacion:: Intervalo de tiempo: '+this.tiempoIntervalo+' segundos') ;
     }
@@ -22,10 +22,17 @@ class BatchSincronizacion {
         let intervaloSincro = {} ;
         try {
             //
-            this.mercadolibreData.iniciarSincronizacionSellerId( this.sellerId ) ;
+            this.mercadolibre.usuarios.sincronizarUsuario( this.sellerId )
+                .catch(respErr => { console.dir(respErr) ; throw respErr ; }) ;
+            //
+            this.mercadolibre.productos.iniciarSincronizacionSellerId( this.sellerId )
+                .then(respOk   => {console.log(new Date().toISOString()+'....sincronizacion ok') ;})
+                .catch(respMal => {console.log(new Date().toISOString()+'....ERROR durante sincronizacion') ; }) ;
             intervaloSincro = setInterval(function(){
                 console.log(new Date().toISOString()+'..sincronizarProductos::') ;
-                this.mercadolibreData.iniciarSincronizacionSellerId( this.sellerId ) ;
+                this.mercadolibre.productos.iniciarSincronizacionSellerId( this.sellerId )
+                    .then(respOk   => {console.log(new Date().toISOString()+'....sincronizacion ok') ;})
+                    .catch(respMal => {console.log(new Date().toISOString()+'....ERROR durante sincronizacion') ; }) ;
             }.bind(this), this.tiempoIntervalo ) ;
             //
         } catch(errSincro){

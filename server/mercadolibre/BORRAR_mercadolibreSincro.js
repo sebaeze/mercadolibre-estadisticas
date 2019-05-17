@@ -12,11 +12,12 @@ class MercadolibreData {
         this.appId    = argConfigML.AppId       || "5820076076281938" ;
         this.secret   = argConfigML.secret      || "NUTGIk5rSkG0GCbRrY1SnY9YAzdr7Sqb" ;
         this.tokenId  = argConfigML.accessToken || "APP_USR-5820076076281938-051417-8e1d70d4e3657eca23ee620caf013915-15103702" ;
+        this.refreshTocken = '' ;
         this.meliObj  = new melli.Meli( this.appId, this.secret, this.tokenId ); //, [access_token], [refresh_token]);
         this.dbases   = db(argConfigML.mongoDb) ;
     }
     //
-    accessToken(){
+    accessToken(){ // Todavia no funciona esto, nose ni para que es
         return new Promise(function(respData,respRej){
             try {
                 //
@@ -25,12 +26,24 @@ class MercadolibreData {
                     if ( err ){
                         respRej( err ) ;
                     } else {
+                        this.tokenId = refresh ;
                         respData( refresh ) ;
                     }
-                }) ;
+                }.bind(this)) ;
                 //
             } catch(errUser){
                 respRej(errUser) ;
+            }
+        }.bind(this)) ;
+    }
+    //
+    infoUsuario(argId){
+        return new Promise(function(respData,respRej){
+            try{
+
+            } catch(errInfo){
+                console.dir(errInfo) ;
+                respRej(errInfo) ;
             }
         }.bind(this)) ;
     }
@@ -48,13 +61,13 @@ class MercadolibreData {
                                 return this.buscarProductosPendientes(argSellerId,datosOffset0.results,datosOffset0.paging.limit,datosOffset0.paging.total) ;
                             }
                         } catch(errOffset0){
-                            console.dir(datosOffset0) ;
+                            //console.dir(datosOffset0) ;
                             console.dir(errOffset0) ;
                         }
                     }.bind(this))
                     .then(function(datosOffset1){
                         console.log('....(2) then: ll: '+datosOffset1.length+';') ;
-                        return this.parseArray2objeto(datosOffset1) ;
+                        return this.parseArray2objeto(datosOffset1,argSellerId) ;
                     }.bind(this))
                     .then(function(productosMl){
                         console.log('....(3) then: ll: '+Object.keys(productosMl).length+';') ;
@@ -66,9 +79,15 @@ class MercadolibreData {
                     }.bind(this))
                     .then(function(datosAdded){
                         console.log('....(5) then: ll: '+datosAdded.length+';') ;
+                        let vendedor = this.parseProductosVendedor(datosAdded,argSellerId) ;
+                        return this.dbases.vendedores.add( vendedor )
+                    }.bind(this))
+                    .then(function(datosAdded){
+                        console.log('....(6) then: ll: '+datosAdded.length+';') ;
                         respDatos( datosAdded ) ;
                     }.bind(this))
                     .catch(errPRod => {
+                        console.log('...estoy en .catch superior de iniciarSincronizacionSellerId ') ;
                         console.dir(errPRod) ;
                         respRej(errPRod) ;
                     })
@@ -102,7 +121,39 @@ class MercadolibreData {
         }.bind(this)) ;
     }
     //
-    parseArray2objeto(argArrayResult){
+    parseProductosVendedor(argArrayResult,argSellerId){
+        let tempObj2actualizar = {
+            _id: argSellerId,
+            vendedorId: argSellerId,
+            cantidadProductos: 0,
+            disponibles: 0,
+            vendidos: 0,
+            categoriasTitulo:{}
+        } ;
+        try {
+            tempObj2actualizar.cantidadProductos = argArrayResult.length ;
+            for(let posRes=0;posRes<argArrayResult.length;posRes++){
+                let objProd                          = argArrayResult[posRes] ;
+                let categoriaSegunTitulo             = String(objProd.title).toUpperCase().split(' ') ;
+                categoriaSegunTitulo                 = categoriaSegunTitulo[0] ;
+                tempObj2actualizar.disponibles      += objProd.available_quantity ;
+                tempObj2actualizar.vendidos         += objProd.sold_quantity ;
+                if ( !tempObj2actualizar.categoriasTitulo[categoriaSegunTitulo] ){
+                    tempObj2actualizar.categoriasTitulo[categoriaSegunTitulo] = {
+                        cantidad: 0,
+                        nombre: categoriaSegunTitulo
+                    }
+                }
+                tempObj2actualizar.categoriasTitulo[categoriaSegunTitulo].cantidad++ ;
+            }
+            //
+        } catch(errArray2Obj){
+            throw errArray2Obj ;
+        }
+        return tempObj2actualizar ;
+    }
+    //
+    parseArray2objeto(argArrayResult,argSellerId){
         let tempObj2actualizar = {} ;
         try {
             //
@@ -117,7 +168,8 @@ class MercadolibreData {
                 let objProd = argArrayResult[posRes] ;
                 objProd.categoriaSegunTitulo     = String(objProd.title).toUpperCase().split(' ') ;
                 objProd.categoriaSegunTitulo     = objProd.categoriaSegunTitulo[0] ;
-                objProd._id                      = objProd.id ;
+                objProd._id                      = objProd.id  ;
+                objProd.sellerId                 = argSellerId ;
                 tempObj2actualizar[ objProd.id ] = objProd ;
             }
             //
@@ -196,7 +248,12 @@ class MercadolibreData {
                         console.dir(err);
                         respRej( err ) ;
                     } else {
-                        respDatos( res ) ;
+                        if ( !res.status ){ res.status=200; }
+                        if ( res.status>=200 && res.status<400 ){
+                            respDatos( res ) ;
+                        } else {
+                            respRej( res ) ;
+                        }
                     }
                 }) ;
                 //

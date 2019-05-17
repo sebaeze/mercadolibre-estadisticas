@@ -21,5 +21,14 @@
         "emailGateway":"jym.all.graphics.email@gmail.com",
         "passwordEmailGateway":"qaz11qaz",
         "nombreMuestraEmailGateway":"Mercadolibre-estadisticas Backend"
+    },
+    "passport":{
+        "mercadolibre":{
+            "clientID": "5820076076281938",
+            "clientSecret": "NUTGIk5rSkG0GCbRrY1SnY9YAzdr7Sqb",
+            "urlLogin": "/mercadolibre",
+            "pathUrlCallback":"/mercadolibre/callback",
+            "callbackURL": "/auth/mercadolibre/callback"
+        }
     }
 }

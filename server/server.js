@@ -8,5 +8,5 @@ const restAPIs            = require('./api/apiIndex')     ;
 const batchSincronizacion = require('./batch/batchIndex').batchSincronizacion( config ) ;
 //
 restAPIs.iniciarApi( config ) ;
-const fnIntervalo = batchSincronizacion.iniciarSincronizacion() ;
+//const fnIntervalo = batchSincronizacion.iniciarSincronizacion() ;
 //

@@ -6,12 +6,10 @@ const MongoClient = require('mongodb').MongoClient ;
 class Db  {
     //
     constructor(argConfigDb){
-        console.dir(argConfigDb) ;
         if ( !argConfigDb.url      ){ argConfigDb.url='mongodb://localhost:27017'; }
         if ( !argConfigDb.database ){ argConfigDb.database='dburl'; }
         this.dbName  = argConfigDb.database || 'mlestadisticas' ;
         this.urlConnect = argConfigDb.url+'/'+this.dbName ;
-        console.log('...connectando: '+this.urlConnect+';') ;
         this.cliente    = new MongoClient( this.urlConnect ,{ useNewUrlParser: true }) ;
     }
     //
@@ -19,6 +17,7 @@ class Db  {
         return new Promise(function(respClien,respRech){
             try {
                 //
+                console.log('...connectando: '+this.urlConnect+';') ;
                 this.cliente.connect(function(err, client) {
                     if ( err ){
                         console.log('....ERROR connect base: '+argDB+';') ;

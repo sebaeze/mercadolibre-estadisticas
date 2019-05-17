@@ -3,9 +3,12 @@
 */
 const Db          = require('./db').classDb        ;
 //
-class DbProductos extends Db {
+class DbVendedores extends Db {
     //
-    constructor(argConfigDb){ super(argConfigDb) ; }
+    constructor(argConfigDb){
+        super(argConfigDb) ;
+        this.collectionNombre = 'vendedores' ;
+    }
     //
     add(argObjProducto){
         return new Promise(function(respData,respRej){
@@ -17,13 +20,13 @@ class DbProductos extends Db {
                         return argDb ;
                     }.bind(this))
                     .then(function(argDbConn){
-                        argDbConn.collection('productos').insertMany( arraydocs, {w: 'majority', wtimeout: 10000, serializeFunctions: true } ,
+                        argDbConn.collection( this.collectionNombre ).insertMany( arraydocs, {w: 'majority', wtimeout: 10000, serializeFunctions: true } ,
                         function(err, r) {
                             if ( err ){
                                 console.log('codigo: '+err.code+';') ;
                                 respRej(err) ;
                             } else {
-                                respData( arraydocs ) ;
+                                respData( argObjProducto ) ;
                             }
                             argDbConn.cerrar() ;
                         });
@@ -39,9 +42,9 @@ class DbProductos extends Db {
     //
 }
 //
-module.exports.classDb       = DbProductos ;
+module.exports.classDb       = DbVendedores ;
 module.exports.dbUrlInstance = (argConfiguracion) => {
-    const objMongoDbMl = new DbProductos(argConfiguracion) ;
+    const objMongoDbMl = new DbVendedores(argConfiguracion) ;
     return objMongoDbMl ;
 }
 //
