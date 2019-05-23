@@ -3,6 +3,8 @@
 */
 const passport            = require('passport') ;
 const router              = require('express').Router()   ;
+const path                = require('path')     ;
+const eventos             = require( path.join(__dirname,'../lib/emisorEventos') ) ;
 //
 const configPassportApp = (argConfigPassport,argApp) => {
   //
@@ -29,17 +31,14 @@ const configPassportApp = (argConfigPassport,argApp) => {
         ) ;
     }
     if ( argConfigPassport[keyStrategy].pathUrlCallback ){
-      /*
-      router.all( argConfigPassport[keyStrategy].pathUrlCallback  ,
-                  passport.authorize(keyStrategy,objRedirects),
-                  function(req,res){ res.redirect('/'); }
-                ) ;
-                */
       router.get(argConfigPassport[keyStrategy].pathUrlCallback, function(req, res, next) {
         passport.authenticate(keyStrategy,function(err, user, info) {
-          if (err) { console.log('err: '+err+';') ; }
-          console.log('user: ') ;
-          console.dir(user) ;
+          if (err) {
+            console.log('err: '+err+';') ;
+          } else {
+            console.log('user: ') ;
+            console.dir(user.email) ;
+          }
           //
           if (!user) { return res.redirect('/'); }
           req.logIn(user, function(err) {
@@ -47,6 +46,7 @@ const configPassportApp = (argConfigPassport,argApp) => {
             req.session.user = user ;
             return res.redirect('/');
           });
+          //
         })(req, res, next);
       });
     }

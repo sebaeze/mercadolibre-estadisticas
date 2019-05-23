@@ -61,11 +61,6 @@ class MercadolibreProductos extends  MercadolibreGeneric {
                         return this.dbases.productos.add( Object.values(datosParsed) ) ;
                     }.bind(this))
                     .then(function(datosAdded){
-                        console.log('....(5) then: ll: '+datosAdded.length+';') ;
-                        let vendedor = this.parseProductosVendedor(datosAdded,argSellerId) ;
-                        return this.dbases.vendedores.add( vendedor )
-                    }.bind(this))
-                    .then(function(datosAdded){
                         console.log('....(6) then: ll: '+datosAdded.length+';') ;
                         respDatos( datosAdded ) ;
                     }.bind(this))
@@ -183,20 +178,25 @@ class MercadolibreProductos extends  MercadolibreGeneric {
     productosSegunSellerOffset(argSellerId,argOffset=0,argLimit=50){
         return new Promise(function(respDatos,respRej){
             try{
-                this.meliObj.get( 'sites/MLA/search' , {seller_id: argSellerId, offset: argOffset, limit: argLimit},
-                function (err, res) {
-                    if ( err ){
-                        console.dir(err);
-                        respRej( err ) ;
-                    } else {
-                        if ( !res.status ){ res.status=200; }
-                        if ( res.status>=200 && res.status<400 ){
-                            respDatos( res ) ;
+                let tempId = (typeof argSellerId=="object") ? argSellerId.id : argSellerId ;
+                /*  El siguiente API solo funciona cuando el token corresponde al sellerid en busqueda
+                //   /users/{Cust_id}/items/search?access_token=$ACCESS_TOKEN
+                //this.meliObj.get( 'users/'+tempId+'/items/search' , {},
+                */
+                this.meliObj.get( 'sites/MLA/search' , {seller_id: tempId, offset: argOffset, limit: argLimit},
+                    function (err, res) {
+                        if ( err ){
+                            console.dir(err);
+                            respRej( err ) ;
                         } else {
-                            respRej( res ) ;
+                            if ( !res.status ){ res.status=200; }
+                            if ( res.status>=200 && res.status<400 ){
+                                respDatos( res ) ;
+                            } else {
+                                respRej( res ) ;
+                            }
                         }
-                    }
-                }) ;
+                    }) ;
                 //
             } catch(errSinc){
                 console.dir(errSinc) ;

@@ -4,7 +4,11 @@
 const express         = require('express') ;
 const router          = require('express').Router()   ;
 const path            = require('path') ;
+const routerVisitas   = require('./routerVisitas').routerVisitas ;
 const utilitario      = require(  path.join(__dirname,'../../lib/utiles') ).Utilitarios() ;
+const db              = require( path.join(__dirname ,'../../db/dbIndex') ).bases ;
+const autenticado     = require(  path.join(__dirname,'../../auth/autenticado') ).autenticado ;
+const htmlReporte     = utilitario.htmlContent( 'reporte.html' ) ;
 //
 const public          = utilitario.getDistPath() ;
 //
@@ -22,6 +26,8 @@ let opciones = {
 */
 module.exports = (argConfig) => {
   //
+  const dbases     = db(argConfig.mongoDb) ;
+  //
   argConfig.email.nombreMuestraEmailGateway = argConfig.email.nombreMuestraEmailGateway+' <'+argConfig.email.emailGateway+'>' ;
   const sendGmail = require('gmail-send')({
     user: argConfig.email.emailGateway,
@@ -35,7 +41,7 @@ module.exports = (argConfig) => {
     // replyTo: credentials.user,            // replyTo: by default undefined
     // bcc: 'some-user@mail.com',            // almost any option of `nodemailer` will be passed to it
     subject: 'test subject',
-    //text:    'gmail-send example 1',         // Plain text
+    //text:    'gmail-send example 1',      // Plain text
     html:    '<b>html text</b>'            // HTML
   });
   //
@@ -48,6 +54,36 @@ module.exports = (argConfig) => {
     //
     res.status(200) ;
     res.json({"path":"index"});
+    //
+  });
+  router.use('/api', routerVisitas(dbases) ) ;
+  //
+  router.get('/api/clientes', function(req, res) {
+    res.set('access-Control-Allow-Origin', '*');
+    res.set('access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    //
+    dbases.usuarios.getClientes('33300941',{soloId:false})
+          .then(arrayClientes => {
+            res.status(200) ;
+            res.json(arrayClientes) ;
+          })
+          .catch(respError => {
+            res.status(500) ;
+            res.json( {error: respError} ) ;
+          })
+    //
+  });
+  //
+  router.get('/reporte', function(req, res) {
+    res.set('access-Control-Allow-Origin', '*');
+    res.set('access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    //
+    res.status(200) ;
+    let pathReporteHtml = path.join(__dirname,'../../../dist/reporte.html') ;
+    console.log('pathReporteHtml: '+pathReporteHtml) ;
+    res.sendFile( pathReporteHtml );
     //
   });
   //

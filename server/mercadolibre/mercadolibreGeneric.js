@@ -12,9 +12,10 @@ class MercadolibreGeneric {
         this.appId    = argConfigML.AppId       || "5820076076281938" ;
         this.secret   = argConfigML.secret      || "NUTGIk5rSkG0GCbRrY1SnY9YAzdr7Sqb" ;
         this.tokenId  = argConfigML.accessToken || "APP_USR-5820076076281938-051417-8e1d70d4e3657eca23ee620caf013915-15103702" ;
+        this.refreshToken  = argConfigML.refreshToken ;
         this.refreshTocken = '' ;
         this.requestPromise  = require('request-promise') ;
-        this.meliObj    = new melli.Meli( this.appId, this.secret, this.tokenId ); //, [access_token], [refresh_token]);
+        this.meliObj    = new melli.Meli( this.appId, this.secret, this.tokenId, this.refreshToken ) ;
         this.dbases     = db(argConfigML.mongoDb) ;
     }
     //
