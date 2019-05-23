@@ -4,7 +4,7 @@
 const express         = require('express') ;
 const router          = require('express').Router()   ;
 const path            = require('path') ;
-const routerVisitas   = require('./routerVisitas').routerVisitas ;
+const routerUsuarios   = require('./routerUsuarios').routerUsuarios ;
 const utilitario      = require(  path.join(__dirname,'../../lib/utiles') ).Utilitarios() ;
 const db              = require( path.join(__dirname ,'../../db/dbIndex') ).bases ;
 const autenticado     = require(  path.join(__dirname,'../../auth/autenticado') ).autenticado ;
@@ -56,7 +56,7 @@ module.exports = (argConfig) => {
     res.json({"path":"index"});
     //
   });
-  router.use('/api', routerVisitas(dbases) ) ;
+  router.use('/api', routerUsuarios(dbases) ) ;
   //
   router.get('/api/clientes', function(req, res) {
     res.set('access-Control-Allow-Origin', '*');

@@ -14,4 +14,11 @@ Sincronización de datos de mercadolibre en base Mongodb & APIs para acceder a l
 * npm install
 * npm start
 
-##
+## APIs
+
+GET  /api/visitas Array de visitas en periodo determinado
+     parametros: ?nickname=NICKNAME&fechaDesde=YYYY-MM-DD
+
+POST  /api/usuarios/sincronizar
+      Inicia sincronización de usuario Id y sus productos
+      parametros: ?id=ID&accessToken=ACCESS_TOKEN
