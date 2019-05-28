@@ -11,7 +11,7 @@ class MercadolibreGeneric {
         if ( !argConfigML ){ argConfigML={}; }
         this.appId    = argConfigML.AppId       || "5820076076281938" ;
         this.secret   = argConfigML.secret      || "NUTGIk5rSkG0GCbRrY1SnY9YAzdr7Sqb" ;
-        this.tokenId  = argConfigML.accessToken || "APP_USR-5820076076281938-051417-8e1d70d4e3657eca23ee620caf013915-15103702" ;
+        this.tokenId  = argConfigML.accessToken || "APP_USR-5820076076281938-052315-52ba18c76a43113e114a10ca13e079ce-15103702" ;
         this.refreshToken  = argConfigML.refreshToken ;
         this.refreshTocken = '' ;
         this.requestPromise  = require('request-promise') ;

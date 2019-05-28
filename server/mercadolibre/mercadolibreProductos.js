@@ -56,8 +56,12 @@ class MercadolibreProductos extends  MercadolibreGeneric {
                         console.log('....(3) then: ll: '+Object.keys(productosMl).length+';') ;
                         return this.getItemDetalles(productosMl) ;
                     }.bind(this))
+                    .then(function(prodMlConDetalle){
+                        console.log('....(4) then: ll: '+Object.keys(prodMlConDetalle).length+';') ;
+                        return this.getItemVisitas(prodMlConDetalle) ;
+                    }.bind(this))
                     .then(function(datosParsed){
-                        console.log('....(4) then: ll: '+Object.keys(datosParsed).length+';') ;
+                        console.log('....(5) then: ll: '+Object.keys(datosParsed).length+';') ;
                         return this.dbases.productos.add( Object.values(datosParsed) ) ;
                     }.bind(this))
                     .then(function(datosAdded){
@@ -271,6 +275,66 @@ class MercadolibreProductos extends  MercadolibreGeneric {
                             for(let posArr=0;posArr<arrayProductos.length;posArr++){
                                 let objProd = arrayProductos[posArr].body || arrayProductos[posArr] ;
                                 argMlProductos[objProd.id] = objProd ;
+                            }
+                            respDatos(argMlProductos) ;
+                        }.bind(this))
+                        .catch(errorAll => {
+                            console.log('....algo fallo en las promisesss ')  ;
+                            respRej(errorAll) ;
+                        }) ;
+                //
+            } catch(errGetItems){
+                respRej(errGetItems) ;
+            }
+        }.bind(this)) ;
+    }
+    //
+    getItemVisitas(argMlProductos){
+        return new Promise(function(respDatos,respRej){
+            try {
+                //
+                const visitasItem = (argId) => {
+                    try{
+                        let mlReq      = {method:'GET',uri: 'https://api.mercadolibre.com/items/'+argId+'/visits/time_window?last=300&unit=day',contentType: 'application/json',accept: 'application/json'} ;
+                        return this.requestPromise( mlReq ) ;
+                    } catch(errDet){ throw errDet; }
+                }
+                //
+                let tempArrayIds         = Object.keys(argMlProductos) ;
+                let arrayPromisesDetalle = [] ;
+                for(let insArr=0;insArr<tempArrayIds.length;insArr++){
+                    arrayPromisesDetalle.push( visitasItem(tempArrayIds[insArr])  ) ;
+                }
+                //
+                Promise.all( arrayPromisesDetalle )
+                        .then(function(respPromises){
+                            let tempArrayParsed = respPromises.map(function(arrayItems){return JSON.parse(arrayItems) ;}) ;
+                            return tempArrayParsed ;
+                        }.bind(this))
+                        .then(function(arrayDeArray){
+                            let tempArrayProductos = [] ;
+                            for(let indArrArr=0;indArrArr<arrayDeArray.length;indArrArr++){
+                                let tempArr = arrayDeArray[indArrArr] ;
+                                if ( Array.isArray(tempArr) ){
+                                    tempArr.forEach(elemAr => {
+                                        tempArrayProductos.push( elemAr ) ;
+                                    }) ;
+                                } else {
+                                    tempArrayProductos.push( tempArr ) ;
+                                }
+                            }
+                            return tempArrayProductos ;
+                        }.bind(this))
+                        .then(function(arrayProductos){
+                            for(let posArr=0;posArr<arrayProductos.length;posArr++){
+                                let objProdVisitas = arrayProductos[posArr].body || arrayProductos[posArr] ;
+                                argMlProductos[objProdVisitas.item_id].visitas = objProdVisitas.results ;
+                                // Cuenta cantidad total de visitas
+                                let totalVisitas = 0 ;
+                                for(let indVisitas=0;indVisitas<objProdVisitas.results.length;indVisitas++){
+                                    totalVisitas += objProdVisitas.results[indVisitas].total || 0 ;
+                                }
+                                argMlProductos[objProdVisitas.item_id].totalVisitas = totalVisitas ;
                             }
                             respDatos(argMlProductos) ;
                         }.bind(this))

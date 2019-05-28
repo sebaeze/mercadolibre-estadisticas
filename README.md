@@ -16,8 +16,8 @@ Sincronización de datos de mercadolibre en base Mongodb & APIs para acceder a l
 
 ## APIs
 
-GET  /api/visitas
+* GET  /api/visitas
      parametros: ?nickname=NICKNAME&fechaDesde=YYYY-MM-DD
 
-POST  /api/usuarios/sincronizar
-      parametros: ?id=ID&accessToken=ACCESS_TOKEN
+* POST  /api/usuarios/sincronizar
+      parametros: id=ID&accessToken=ACCESS_TOKEN

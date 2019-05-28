@@ -62,6 +62,35 @@ class DbProductos extends Db {
         }.bind(this))
     }
     //
+    getVisitasProductos(argSellerId){
+        return new Promise(function(respData,respRej){
+            try {
+                //
+                let tempIdSeller = (typeof argSellerId=='object') ? argSellerId.id||argSellerId._id : argSellerId||false ;
+                this.conectarBase( this.dbName )
+                    .then(function(argDb){
+                        let selector = {} ;
+                        if ( tempIdSeller ){
+                            selector = {seller_id: parseInt(tempIdSeller)} ;
+                        }
+                        console.dir(selector) ;
+                        return this.coneccion.collection( this.collectionNombre )
+                                            .find( selector, {projection:{_id:1, title:1, visitas:1, permalink:1 }} )
+                                            .sort({totalVisitas:-1})
+                                            .limit(10)
+                                            .toArray() ;
+                    }.bind(this))
+                    .then(function(arrayClientes){
+                        respData( arrayClientes ) ;
+                    }.bind(this))
+                    .catch(respRej) ;
+                //
+            } catch(errGetCli){
+                respRej(errGetCli) ;
+            }
+        }.bind(this)) ;
+    }
+    //
 }
 //
 module.exports.classDb       = DbProductos ;

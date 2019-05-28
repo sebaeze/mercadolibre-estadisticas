@@ -32,6 +32,12 @@ class MercadolibreUsuarios extends  MercadolibreGeneric {
                     ids: tempArrayIds , access_token: this.tokenId
                 }, function (err, res) {
                     //
+                    if ( err ){
+                        console.dir(err) ;
+                    }
+                    //
+                    console.dir(res) ;
+                    if ( !Array.isArray(res) ){ res=new Array(res); }
                     let arrayUsrInfo = res.map(elemUser => {
                         let tempObjUsr = {
                             _id: elemUser.body.id || '',

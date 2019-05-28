@@ -56,7 +56,7 @@ module.exports = (argConfig) => {
     res.json({"path":"index"});
     //
   });
-  router.use('/api', routerUsuarios(dbases) ) ;
+  router.use('/api', routerUsuarios(dbases,argConfig) ) ;
   //
   router.get('/api/clientes', function(req, res) {
     res.set('access-Control-Allow-Origin', '*');
